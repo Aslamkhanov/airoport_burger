@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
-public class SteakhouseTest {
+public class SteakhouseIT {
     private Waitress waitress;
     private Kitchen kitchen;
     private PayTerminal payTerminal;
