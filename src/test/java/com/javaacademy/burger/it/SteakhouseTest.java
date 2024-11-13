@@ -2,15 +2,17 @@ package com.javaacademy.burger.it;
 
 import com.javaacademy.burger.*;
 import com.javaacademy.burger.dish.Dish;
-import com.javaacademy.burger.dish.DishType;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.math.BigDecimal;
+import static com.javaacademy.burger.Currency.*;
+import static com.javaacademy.burger.dish.DishType.*;
+import static java.math.BigDecimal.valueOf;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 public class SteakhouseTest {
@@ -27,14 +29,14 @@ public class SteakhouseTest {
         PayTerminal payTerminal = new PayTerminal();
         Steakhouse steakhouse = new Steakhouse(waitress, kitchen, payTerminal);
 
-        Paycheck paycheck = steakhouse.makeOrder(DishType.BURGER, Currency.RUB);
-        Assertions.assertNotNull(paycheck);
-        Assertions.assertEquals(DishType.BURGER, paycheck.getDishType());
+        Paycheck paycheck = steakhouse.makeOrder(BURGER, RUB);
+        assertNotNull(paycheck);
+        assertEquals(BURGER, paycheck.getDishType());
 
         Dish dish = steakhouse.takeOrder(paycheck);
 
-        Assertions.assertNotNull(dish);
-        Assertions.assertEquals(DishType.BURGER, dish.getDishType());
+        assertNotNull(dish);
+        assertEquals(BURGER, dish.getDishType());
     }
 
     @Test
@@ -46,16 +48,16 @@ public class SteakhouseTest {
         PayTerminal payTerminal = Mockito.spy(PayTerminal.class);
         Steakhouse steakhouse = new Steakhouse(waitress, kitchen, payTerminal);
 
-        Mockito.when(payTerminal.pay(DishType.RIBS, Currency.RUB))
-                .thenReturn(new Paycheck(new BigDecimal("700"), Currency.RUB, DishType.RIBS));
+        Mockito.when(payTerminal.pay(RIBS, RUB))
+                .thenReturn(new Paycheck(valueOf(700), RUB, RIBS));
 
-        Paycheck paycheck = steakhouse.makeOrder(DishType.RIBS, Currency.RUB);
+        Paycheck paycheck = steakhouse.makeOrder(RIBS, RUB);
         Dish dish = steakhouse.takeOrder(paycheck);
 
-        Assertions.assertNotNull(payTerminal);
-        Assertions.assertEquals(DishType.RIBS, dish.getDishType());
-        Assertions.assertEquals(new BigDecimal("700"), paycheck.getTotalAmount());
-        Assertions.assertEquals(Currency.RUB, paycheck.getCurrency());
+        assertNotNull(payTerminal);
+        assertEquals(RIBS, dish.getDishType());
+        assertEquals(valueOf(700), paycheck.getTotalAmount());
+        assertEquals(RUB, paycheck.getCurrency());
     }
 
     @BeforeEach
@@ -73,14 +75,14 @@ public class SteakhouseTest {
     public void makeOrderByTaxRibs() {
 
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.doReturn(new Paycheck(new BigDecimal("700"), Currency.RUB, DishType.RIBS))
-                .when(payTerminal).pay(DishType.RIBS, Currency.RUB);
+        Mockito.doReturn(new Paycheck(valueOf(700), RUB, RIBS))
+                .when(payTerminal).pay(RIBS, RUB);
 
-        Paycheck paycheck = steakhouse.makeOrder(DishType.RIBS, Currency.RUB);
-        Assertions.assertNotNull(paycheck);
-        Assertions.assertEquals(new BigDecimal("700"), paycheck.getTotalAmount());
-        Assertions.assertEquals(Currency.RUB, paycheck.getCurrency());
-        Assertions.assertEquals(DishType.RIBS, paycheck.getDishType());
+        Paycheck paycheck = steakhouse.makeOrder(RIBS, RUB);
+        assertNotNull(paycheck);
+        assertEquals(valueOf(700), paycheck.getTotalAmount());
+        assertEquals(RUB, paycheck.getCurrency());
+        assertEquals(RIBS, paycheck.getDishType());
     }
 
     @Test
@@ -88,14 +90,14 @@ public class SteakhouseTest {
     public void makeOrderByTaxPotato() {
 
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.doReturn(new Paycheck(new BigDecimal("1"), Currency.USD, DishType.FRIED_POTATO))
-                .when(payTerminal).pay(DishType.FRIED_POTATO, Currency.USD);
+        Mockito.doReturn(new Paycheck(valueOf(1), USD, FRIED_POTATO))
+                .when(payTerminal).pay(FRIED_POTATO, USD);
 
-        Paycheck paycheck = steakhouse.makeOrder(DishType.FRIED_POTATO, Currency.USD);
-        Assertions.assertNotNull(paycheck);
-        Assertions.assertEquals(new BigDecimal("1"), paycheck.getTotalAmount());
-        Assertions.assertEquals(DishType.FRIED_POTATO, paycheck.getDishType());
-        Assertions.assertEquals(Currency.USD, paycheck.getCurrency());
+        Paycheck paycheck = steakhouse.makeOrder(FRIED_POTATO, USD);
+        assertNotNull(paycheck);
+        assertEquals(valueOf(1), paycheck.getTotalAmount());
+        assertEquals(FRIED_POTATO, paycheck.getDishType());
+        assertEquals(USD, paycheck.getCurrency());
     }
 
     @Test
@@ -103,13 +105,13 @@ public class SteakhouseTest {
     public void makeOrderByTaxMozambicansDollar() {
 
         Mockito.when(waitress.giveOrderToKitchen(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.doReturn(new Paycheck(new BigDecimal("1"), Currency.MOZAMBICAN_DOLLARS, DishType.BURGER))
-                .when(payTerminal).pay(DishType.BURGER, Currency.MOZAMBICAN_DOLLARS);
+        Mockito.doReturn(new Paycheck(valueOf(1), MOZAMBICAN_DOLLARS, BURGER))
+                .when(payTerminal).pay(BURGER, MOZAMBICAN_DOLLARS);
 
-        Paycheck paycheck = steakhouse.makeOrder(DishType.BURGER, Currency.MOZAMBICAN_DOLLARS);
-        Assertions.assertNotNull(paycheck);
-        Assertions.assertEquals(new BigDecimal("1"), paycheck.getTotalAmount());
-        Assertions.assertEquals(DishType.BURGER, paycheck.getDishType());
-        Assertions.assertEquals(Currency.MOZAMBICAN_DOLLARS, paycheck.getCurrency());
+        Paycheck paycheck = steakhouse.makeOrder(BURGER, MOZAMBICAN_DOLLARS);
+        assertNotNull(paycheck);
+        assertEquals(valueOf(1), paycheck.getTotalAmount());
+        assertEquals(BURGER, paycheck.getDishType());
+        assertEquals(MOZAMBICAN_DOLLARS, paycheck.getCurrency());
     }
 }

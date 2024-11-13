@@ -2,11 +2,14 @@ package com.javaacademy.burger.unit;
 
 import com.javaacademy.burger.Kitchen;
 import com.javaacademy.burger.Waitress;
-import com.javaacademy.burger.dish.DishType;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static com.javaacademy.burger.dish.DishType.BURGER;
+import static com.javaacademy.burger.dish.DishType.FUAGRA;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WaitressTest {
 
@@ -16,8 +19,8 @@ public class WaitressTest {
         Kitchen kitchen = Mockito.mock(Kitchen.class);
         Waitress waitress = new Waitress();
 
-        boolean result = waitress.giveOrderToKitchen(DishType.BURGER, kitchen);
-        Assertions.assertTrue(result);
+        boolean result = waitress.giveOrderToKitchen(BURGER, kitchen);
+        assertTrue(result);
     }
 
     @Test
@@ -26,7 +29,7 @@ public class WaitressTest {
         Kitchen kitchen = Mockito.mock(Kitchen.class);
         Waitress waitress = new Waitress();
 
-        boolean result = waitress.giveOrderToKitchen(DishType.FUAGRA, kitchen);
-        Assertions.assertFalse(result);
+        boolean result = waitress.giveOrderToKitchen(FUAGRA, kitchen);
+        assertFalse(result);
     }
 }

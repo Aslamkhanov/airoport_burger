@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.Queue;
 
+import static com.javaacademy.burger.dish.DishType.BURGER;
+import static com.javaacademy.burger.dish.DishType.FUAGRA;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class KitchenTest {
@@ -25,7 +27,7 @@ public class KitchenTest {
     @Test
     @DisplayName("Ситуация №1: Кухня успешно приготовила бургер")
     void cookWithValidDishTypeSuccess() {
-        DishType dishType = DishType.BURGER;
+        DishType dishType = BURGER;
         kitchen.cook(dishType);
 
         Map<DishType, Queue<Dish>> completedDishes = kitchen.getCompletedDishes();
@@ -36,7 +38,7 @@ public class KitchenTest {
     @Test
     @DisplayName("Ситуация №3: Приготовление фуагра, ошибка UnsupportedDishTypeException")
     void testCookWithUnsupportedDishTypeFailure() {
-        DishType dishType = DishType.FUAGRA;
+        DishType dishType = FUAGRA;
 
         Exception exception = assertThrows(UnsupportedDishTypeException.class, () -> {
             kitchen.cook(dishType);
@@ -51,7 +53,7 @@ public class KitchenTest {
         kitchen.setHasGas(false);
 
         Exception exception = assertThrows(KitchenHasNoGasException.class, () -> {
-            kitchen.cook(DishType.BURGER);
+            kitchen.cook(BURGER);
         });
 
         assertEquals("На кухне нет газа", exception.getMessage());
